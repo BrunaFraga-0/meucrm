@@ -1,14 +1,15 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { Cliente } from './cliente.entity';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, Query } from '@nestjs/common';
 
 @Injectable()
 export class ClientesService {
   constructor(
     @InjectRepository(Cliente)
+    //@InjectQueue('welcome-email') private welcomeQueue: Queue, 
     private readonly repo: Repository<Cliente>,
   ) {}
 
@@ -20,12 +21,23 @@ export class ClientesService {
   async criar (criarDto: CreateClienteDto): Promise<Cliente> {
     await this.validarEmailDisponivel(criarDto.email);
 
-    return await this.repo.save(criarDto);
+    const cliente = await this.repo.save(criarDto);
+    //await this.welcomeQueue.add('send-welcome', { email: cliente.email, nome: cliente.nome }); 
+    return cliente;
   }
 
-  async listar(): Promise<Cliente[]>{
-    const lista = await this.repo.find();
-    return lista;
+  async listar(@Query('busca') busca?: string): Promise<Cliente[]>{
+    const termo = busca?.trim();
+
+    if(!termo) {
+     return await this.repo.find();
+    }
+
+    return await this.repo.find({
+      where: {
+        nome: ILike(`%${termo}%`),
+      }
+    })
   }
 
   async buscarPorId(id: string): Promise<Cliente> {
@@ -51,24 +63,3 @@ export class ClientesService {
     return await this.repo.remove(cliente);
   }
 }
-
-/*
-@Injectable() 
-export class ClientesService { 
- constructor( 
- @InjectRepository(Cliente) private repo: Repository<Cliente>, 
- @InjectQueue('welcome-email') private welcomeQueue: Queue, 
- ) {} 
- 
- async criar(dto: CriarClienteDto) { 
- const existente = await this.repo.findOne({ where: { email: dto.email } }); 
- if (existente) throw new ConflictException('Já existe cliente com este 
-email'); 
- 
- const cliente = await this.repo.save(dto); 
- await this.welcomeQueue.add('send-welcome', { email: cliente.email, nome: 
-cliente.nome }); 
- return cliente; 
- } 
-} 
-*/
