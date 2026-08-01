@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, ParseUUIDPipe, Put } from '@nestjs/common';
 import { ClientesService } from './clientes.service';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
@@ -25,7 +25,7 @@ export class ClientesController {
     return this.clientesService.buscarPorId(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   atualizar(@Param('id', new ParseUUIDPipe()) id: string, @Body() updateClienteDto: UpdateClienteDto) {
     return this.clientesService.atualizar(id, updateClienteDto);
   }
