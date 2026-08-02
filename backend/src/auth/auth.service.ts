@@ -7,33 +7,33 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-    constructor(
-        @InjectRepository(Usuario)
-        private readonly repo: Repository<Usuario>,
-        private readonly jwtService: JwtService,
-    ) {}
+  constructor(
+    @InjectRepository(Usuario)
+    private readonly repo: Repository<Usuario>,
+    private readonly jwtService: JwtService,
+  ) {}
 
-    async signIn(email: string, senha: string): Promise<{ access_token: string }> {
-        const usuario = await this.repo.findOne({ where: { email } });
+  async signIn(email: string, senha: string): Promise<{ access_token: string }> {
+    const usuario = await this.repo.findOne({ where: { email } });
 
-        if (!usuario) {
-            throw new UnauthorizedException('Usuário ou senha inválidos');
-        }   
-
-        const senhaValida = await bcrypt.compare(senha, usuario.senha);
-
-        if (!senhaValida) {
-            throw new UnauthorizedException('Usuário ou senha inválidos');
-        }   
-
-        const accesso_token = await this.generateToken(usuario);
-
-        return { access_token: accesso_token };
+    if (!usuario) {
+      throw new UnauthorizedException('Usuário ou senha inválidos');
     }
 
-    private async generateToken(usuario: Usuario): Promise<string> {
-        const payload = { sub: usuario.id, email: usuario.email };
+    const senhaValida = await bcrypt.compare(senha, usuario.senha);
 
-        return this.jwtService.signAsync(payload);
+    if (!senhaValida) {
+      throw new UnauthorizedException('Usuário ou senha inválidos');
     }
+
+    const accesso_token = await this.generateToken(usuario);
+
+    return { access_token: accesso_token };
+  }
+
+  private async generateToken(usuario: Usuario): Promise<string> {
+    const payload = { sub: usuario.id, email: usuario.email };
+
+    return this.jwtService.signAsync(payload);
+  }
 }

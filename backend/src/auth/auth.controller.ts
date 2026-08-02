@@ -4,12 +4,11 @@ import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) {}
 
-    @HttpCode(HttpStatus.OK)
-    
-    @Post('login')
-    async login(@Body() loginDto: LoginDto): Promise<{ access_token: string }> {
-        return this.authService.signIn(loginDto.email, loginDto.senha);
-    }
+  @HttpCode(HttpStatus.OK)
+  @Post('login')
+  async login(@Body() loginDto: LoginDto): Promise<{ access_token: string }> {
+    return this.authService.signIn(loginDto.email, loginDto.senha);
+  }
 }

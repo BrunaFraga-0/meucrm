@@ -12,9 +12,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(
     new ValidationPipe({
-    whitelist: true,
-    forbidNonWhitelisted: true,
-    transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
     }),
   );
 
@@ -22,5 +22,5 @@ async function bootstrap() {
     console.log(`Servidor rodando em http//localhost:${porta}`);
   });
 }
-  
+
 bootstrap();

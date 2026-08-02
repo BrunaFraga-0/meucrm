@@ -3,7 +3,11 @@ import { ILike, Repository } from 'typeorm';
 import { Cliente } from './cliente.entity';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 
@@ -13,38 +17,41 @@ export class ClientesService {
     @InjectRepository(Cliente)
     private readonly repo: Repository<Cliente>,
 
-    @InjectQueue('welcome-email') 
+    @InjectQueue('welcome-email')
     private readonly filaDeBoasVindas: Queue,
-    
   ) {}
 
   private async validarEmailDisponivel(email: string, idClienteAtualizar?: string): Promise<void> {
-    const existente = await this.repo.findOne({ where: { email: email} });
-    
-    if (existente && existente.id !== idClienteAtualizar) throw new ConflictException('Já existe cliente com este e-mail');
+    const existente = await this.repo.findOne({ where: { email: email } });
+
+    if (existente && existente.id !== idClienteAtualizar)
+      throw new ConflictException('Já existe cliente com este e-mail');
   }
 
-  async criar (criarDto: CreateClienteDto): Promise<Cliente> {
+  async criar(criarDto: CreateClienteDto): Promise<Cliente> {
     await this.validarEmailDisponivel(criarDto.email);
 
     const cliente = await this.repo.save(criarDto);
-    await this.filaDeBoasVindas.add('send-welcome', { email: cliente.email, nome: cliente.nome }); 
+    await this.filaDeBoasVindas.add('send-welcome', {
+      email: cliente.email,
+      nome: cliente.nome,
+    });
 
     return cliente;
   }
 
-  async listar(busca?: string): Promise<Cliente[]>{
+  async listar(busca?: string): Promise<Cliente[]> {
     const termo = busca?.trim();
 
-    if(!termo) {
-     return await this.repo.find();
+    if (!termo) {
+      return await this.repo.find();
     }
 
     return await this.repo.find({
       where: {
         nome: ILike(`%${termo}%`),
-      }
-    })
+      },
+    });
   }
 
   async buscarPorId(id: string): Promise<Cliente> {
@@ -55,7 +62,7 @@ export class ClientesService {
 
   async atualizar(id: string, updateClienteDto: UpdateClienteDto): Promise<Cliente> {
     const cliente = await this.buscarPorId(id);
-    
+
     if (updateClienteDto.email) {
       await this.validarEmailDisponivel(updateClienteDto.email, id);
     }

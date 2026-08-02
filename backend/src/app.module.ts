@@ -31,12 +31,10 @@ import { BullModule } from '@nestjs/bullmq';
       connection: {
         host: process.env.REDIS_HOST,
         port: Number(process.env.REDIS_PORT),
-      }}),
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-
 export class AppModule {}
-
-
