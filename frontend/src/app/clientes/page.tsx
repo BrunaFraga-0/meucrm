@@ -17,17 +17,27 @@ interface Cliente {
 export default function ClientesPage() {
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [mensagem, setMensagem] = useState("");
+
   const [busca, setBusca] = useState("");
   const [buscaAplicada, setBuscaAplicada] = useState("");
+
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [telefone, setTelefone] = useState("");
+  const [empresa, setEmpresa] = useState("");
+  const [observacoes, setObservacoes] = useState("");
+  const [salvando, setSalvando] = useState(false);
+
   const router = useRouter();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+
     if (!token) {
-      router.push("/");
+      router.replace("/");
       return;
     }
-  
+
     const fetchClientes = async (token: string) => {
       try {
         const url = buscaAplicada
@@ -53,11 +63,11 @@ export default function ClientesPage() {
 
         const dados = (await resposta.json()) as Cliente[];
         setClientes(dados);
-
-      }catch {
+      } catch {
         setMensagem("Não foi possível conectar ao servidor.");
       }
-    }
+    };
+
     void fetchClientes(token);
   }, [router, buscaAplicada]);
 
@@ -66,9 +76,69 @@ export default function ClientesPage() {
     setBuscaAplicada(busca.trim());
   };
 
-  const logout = () => {
+  const sair = () => {
     localStorage.removeItem("token");
     router.replace("/");
+  };
+
+  const cadastrar = async (evento: SyntheticEvent<HTMLFormElement>) => {
+    evento.preventDefault();
+    setMensagem("");
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.replace("/");
+      return;
+    }
+
+    setSalvando(true);
+
+    try {
+      const resposta = await fetch("http://localhost:3000/clientes", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          nome,
+          email,
+          telefone,
+          empresa: empresa || undefined,
+          observacoes: observacoes || undefined,
+        }),
+      });
+
+      if (resposta.status === 401) {
+        localStorage.removeItem("token");
+        router.replace("/");
+        return;
+      }
+
+      if (!resposta.ok) {
+        setMensagem("Não foi possível cadastrar o cliente.");
+        return;
+      }
+
+      const clienteCriado = (await resposta.json()) as Cliente;
+
+      setClientes((clientesAtuais) => [
+        ...clientesAtuais,
+        clienteCriado,
+      ]);
+
+      setMensagem("Cliente cadastrado com sucesso.");
+      setNome("");
+      setEmail("");
+      setTelefone("");
+      setEmpresa("");
+      setObservacoes("");
+    } catch {
+      setMensagem("Não foi possível conectar ao servidor.");
+    } finally {
+      setSalvando(false);
+    }
   };
 
   return (
@@ -76,15 +146,11 @@ export default function ClientesPage() {
         <section className={styles.telaClientes}>
           
           <header className={styles.cabecalho}>
-            <h1> 
-              <span className={styles.tituloCategoria}>Clientes</span>
-            </h1>
+            <h1 className={styles.titulo}>Clientes</h1>
 
-            <h2 className={styles.subtitulo}>
-              <span className={styles.subtituloCategoria}>Sistema de Gerenciamento de Clientes</span>
-            </h2>
+            <h2 className={styles.subtitulo}>Sistema de Gerenciamento</h2>
 
-            <button type="button" onClick={logout}>Sair</button>
+            <button type="button" onClick={sair}>Sair</button>
           </header>
 
           <form onSubmit={pesquisar}>
@@ -107,6 +173,74 @@ export default function ClientesPage() {
           </form>
 
           {mensagem && (<p className={styles.mensagemErro}>{mensagem}</p>)}
+
+          <h3 className={styles.subtituloCadastro}>Cadastrar</h3>
+
+          <form onSubmit={cadastrar}>
+            <div>
+              <label htmlFor="nome">Nome</label>
+              <input
+                id="nome"
+                name="nome"
+                type="text"
+                value={nome}
+                onChange={(evento) => setNome(evento.target.value)}
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email">E-mail</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(evento) => setEmail(evento.target.value)}
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="telefone">Telefone</label>
+              <input
+                id="telefone"
+                name="telefone"
+                type="tel"
+                placeholder="(XX) 9XXXX-XXXX"
+                pattern="\([1-9]{2}\) 9[0-9]{4}-[0-9]{4}"
+                title="Digite o telefone no formato (XX) 9XXXX-XXXX"
+                value={telefone}
+                onChange={(evento) => setTelefone(evento.target.value)}
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="empresa">Empresa</label>
+              <input
+                id="empresa"
+                name="empresa"
+                type="text"
+                value={empresa}
+                onChange={(evento) => setEmpresa(evento.target.value)}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="observacoes">Observações</label>
+              <textarea
+                id="observacoes"
+                name="observacoes"
+                value={observacoes}
+                onChange={(evento) => setObservacoes(evento.target.value)}
+              />
+            </div>
+
+            <button type="submit" disabled={salvando}>
+              {salvando ? "Salvando..." : "Cadastrar cliente"}
+            </button>
+          </form>
 
           <table>
             <thead>
