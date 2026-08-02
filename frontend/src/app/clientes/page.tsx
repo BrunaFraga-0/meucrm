@@ -28,6 +28,8 @@ export default function ClientesPage() {
   const [observacoes, setObservacoes] = useState("");
   const [salvando, setSalvando] = useState(false);
 
+  const [clienteEmEdicao, setClienteEmEdicao] = useState<string | null>(null);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -95,8 +97,14 @@ export default function ClientesPage() {
     setSalvando(true);
 
     try {
-      const resposta = await fetch("http://localhost:3000/clientes", {
-        method: "POST",
+      const url = clienteEmEdicao
+      ? `http://localhost:3000/clientes/${clienteEmEdicao}`
+      : "http://localhost:3000/clientes";
+
+      const metodo = clienteEmEdicao ? "PUT" : "POST";
+
+      const resposta = await fetch(url, {
+        method: metodo,
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -117,18 +125,29 @@ export default function ClientesPage() {
       }
 
       if (!resposta.ok) {
-        setMensagem("Não foi possível cadastrar o cliente.");
+        setMensagem(clienteEmEdicao
+            ? "Não foi possível atualizar o cliente."
+            : "Não foi possível cadastrar o cliente.",
+        );
         return;
       }
 
-      const clienteCriado = (await resposta.json()) as Cliente;
+      const clienteSalvo = (await resposta.json()) as Cliente;
 
-      setClientes((clientesAtuais) => [
-        ...clientesAtuais,
-        clienteCriado,
-      ]);
+      if (clienteEmEdicao) {
+        setClientes((clientesAtuais) =>
+          clientesAtuais.map((cliente) =>
+            cliente.id === clienteEmEdicao ? clienteSalvo : cliente,
+          ),
+        );
 
-      setMensagem("Cliente cadastrado com sucesso.");
+        setMensagem("Cliente atualizado com sucesso.");
+      } else {
+        setClientes((clientesAtuais) => [...clientesAtuais, clienteSalvo]);
+        setMensagem("Cliente cadastrado com sucesso.");
+      }
+
+      setClienteEmEdicao(null);
       setNome("");
       setEmail("");
       setTelefone("");
@@ -141,50 +160,70 @@ export default function ClientesPage() {
     }
   };
 
+  const editar = (cliente: Cliente) => {
+    setClienteEmEdicao(cliente.id);
+    setNome(cliente.nome);
+    setEmail(cliente.email);
+    setTelefone(cliente.telefone);
+    setEmpresa(cliente.empresa ?? "");
+    setObservacoes(cliente.observacoes ?? "");
+    setMensagem("");
+  };
+
+  const cancelarEdicao = () => {
+    setClienteEmEdicao(null);
+    setNome("");
+    setEmail("");
+    setTelefone("");
+    setEmpresa("");
+    setObservacoes("");
+    setMensagem("");
+  };
+
   const excluir = async (id: string) => {
-  const confirmou = window.confirm(
-    "Tem certeza de que deseja excluir este cliente?",
-  );
+    const confirmou = window.confirm(
+      "Tem certeza de que deseja excluir este cliente?",
+    );
 
-  if (!confirmou) {
-    return;
-  }
+    if (!confirmou) {
+      return;
+    }
 
-  const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
 
-  if (!token) {
-    router.replace("/");
-    return;
-  }
-
-  try {
-    const resposta = await fetch(`http://localhost:3000/clientes/${id}`, {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (resposta.status === 401) {
-      localStorage.removeItem("token");
+    if (!token) {
       router.replace("/");
       return;
     }
 
-    if (!resposta.ok) {
-      setMensagem("Não foi possível excluir o cliente.");
-      return;
+    try {
+      const resposta = await fetch(`http://localhost:3000/clientes/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (resposta.status === 401) {
+        localStorage.removeItem("token");
+        router.replace("/");
+        return;
+      }
+
+      if (!resposta.ok) {
+        setMensagem("Não foi possível excluir o cliente.");
+        return;
+      }
+
+      setClientes((clientesAtuais) =>
+        clientesAtuais.filter((cliente) => cliente.id !== id),
+      );
+
+      setMensagem("Cliente excluído com sucesso.");
+    } catch {
+      setMensagem("Não foi possível conectar ao servidor.");
     }
-
-    setClientes((clientesAtuais) =>
-      clientesAtuais.filter((cliente) => cliente.id !== id),
-    );
-
-    setMensagem("Cliente excluído com sucesso.");
-  } catch {
-    setMensagem("Não foi possível conectar ao servidor.");
-  }
-};
+  };
 
   return (
     <main className={styles.main}>
@@ -219,7 +258,9 @@ export default function ClientesPage() {
 
           {mensagem && (<p className={styles.mensagemErro}>{mensagem}</p>)}
 
-          <h3 className={styles.subtituloCadastro}>Cadastrar</h3>
+          <h3 className={styles.subtituloCadastroEdicao}>
+            {clienteEmEdicao ? "Editar Cliente" : "Cadastrar Cliente"}
+          </h3>
 
           <form onSubmit={cadastrar}>
             <div>
@@ -240,6 +281,8 @@ export default function ClientesPage() {
                 id="email"
                 name="email"
                 type="email"
+                placeholder="nome@dominio.com"
+                title="Digite o email no formato nome@dominio.com"
                 value={email}
                 onChange={(evento) => setEmail(evento.target.value)}
                 required
@@ -281,10 +324,12 @@ export default function ClientesPage() {
                 onChange={(evento) => setObservacoes(evento.target.value)}
               />
             </div>
-
+            
             <button type="submit" disabled={salvando}>
-              {salvando ? "Salvando..." : "Cadastrar cliente"}
+              {salvando? "Salvando..." : clienteEmEdicao ? "Salvar alterações" : "Cadastrar cliente"}
             </button>
+
+            {clienteEmEdicao && (<button type="button" onClick={cancelarEdicao}>Cancelar edição</button>)}
           </form>
 
           <table>
@@ -294,6 +339,7 @@ export default function ClientesPage() {
                 <th>E-mail</th>
                 <th>Telefone</th>
                 <th>Empresa</th>
+                <th>Observações</th>
                 <th>Ações</th>
               </tr>
             </thead>
@@ -301,7 +347,7 @@ export default function ClientesPage() {
             <tbody>
               {clientes.length === 0 ? (
                 <tr>
-                  <td colSpan={5}>Nenhum cliente cadastrado.</td>
+                  <td colSpan={6}>Nenhum cliente cadastrado.</td>
                 </tr>
               ) : (
                 clientes.map((cliente) => (
@@ -310,8 +356,9 @@ export default function ClientesPage() {
                     <td>{cliente.email}</td>
                     <td>{cliente.telefone}</td>
                     <td>{cliente.empresa ?? "-"}</td>
+                    <td>{cliente.observacoes ?? "-"}</td>
                     <td>
-                      <button type="button">Editar</button>
+                      <button type="button" onClick={() => editar(cliente)}>Editar</button>
                       <button type="button" onClick={() => excluir(cliente.id)}>Excluir</button>
                     </td>
                   </tr>
