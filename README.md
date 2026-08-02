@@ -81,21 +81,21 @@ A infraestrutura e o CRUD de clientes no backend estão concluídos. As próxima
 
 ### Autenticação e segurança
 
-- [ ] Módulo de autenticação — 🚧 **Em construção**
-- [ ] DTO de login — 🚧 **Em construção**
-- [ ] Login com email e senha — 🚧 **Em construção**
-- [ ] Geração de token JWT — 🚧 **Em construção**
-- [ ] Estratégia e guard de autenticação — 🚧 **Em construção**
-- [ ] Proteção das rotas de clientes — 🚧 **Em construção**
+- [x] Módulo de autenticação
+- [x] DTO de login 
+- [x] Login com email e senha 
+- [x] Geração de token JWT 
+- [x] Estratégia e guard de autenticação 
+- [x] Proteção das rotas de clientes 
 
 ### Fila e processamento assíncrono
 
 - [x] Redis disponível no Docker Compose
-- [ ] Configuração do BullMQ — 🚧 **Em construção**
-- [ ] Fila `welcome-email` — 🚧 **Em construção**
-- [ ] Adição de job após o cadastro do cliente — 🚧 **Em construção**
-- [ ] Processor de boas-vindas — 🚧 **Em construção**
-- [ ] Log de processamento no terminal — 🚧 **Em construção**
+- [x] Configuração do BullMQ 
+- [x] Fila `welcome-email` 
+- [x] Adição de job após o cadastro do cliente 
+- [x] Processor de boas-vindas 
+- [x] Log de processamento no terminal 
 
 ### Frontend
 
