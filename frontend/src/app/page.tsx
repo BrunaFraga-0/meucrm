@@ -1,66 +1,116 @@
-import Image from "next/image";
+"use client";
+
+import { useState, type SyntheticEvent } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./page.module.css";
 
 export default function Home() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [mensagem, setMensagem] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (evento: SyntheticEvent<HTMLFormElement>) => {
+    evento.preventDefault();
+    setMensagem("");
+
+    try {
+      const resposta = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          senha,
+        }),
+      });
+
+      const dados = (await resposta.json()) as {
+        access_token?: string;
+      };
+
+      if (!resposta.ok || !dados.access_token) {
+        setMensagem("E-mail ou senha inválidos.");
+        return;
+      }
+
+      localStorage.setItem("token", dados.access_token);
+      router.push("/clientes");
+    } catch {
+      setMensagem("Não foi possível conectar ao servidor.");
+    }
+};
+
   return (
-    <div className={styles.page}>
       <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+        <section className={styles.telaDeLogin}>
+          <header className={styles.cabecalho}>
+            <h1> 
+              <span className={styles.tituloCategoria}>MeuCRM</span>
+            </h1>
+
+            <h2 className={styles.subtitulo}>
+              <span className={styles.subtituloCategoria}>Sistema de Gerenciamento de Clientes</span>
+            </h2>
+          </header>
+
+          <p className={styles.paragrafo}>
+            Faça login para acessar o sistema.
           </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+
+          <p className={styles.mensagemErro}>{mensagem}</p>
+
+          <form className={styles.form} onSubmit={handleSubmit}>
+
+            <div className={styles.formEmail}>
+              <label htmlFor="email">E-mail</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="admin@meucrm.com"
+                value={email}
+                onChange={(evento) => setEmail(evento.target.value)}  
+                required
+              />
+            </div>
+
+            <div className={styles.formSenha}>
+              <label htmlFor="senha">Senha</label>
+              <input
+                id="senha"
+                name="senha"
+                type="password"
+                placeholder="••••••"
+                value={senha}
+                onChange={(evento) => setSenha(evento.target.value)}
+                required
+              />
+            </div>
+
+            <button className={styles.botaoEntrar} type="submit">Entrar</button>
+
+            <p className={styles.paragrafoMensagem}>
+              <span className={styles.paragrafoMensagemSpan}>Acesso para demonstração</span> 
+                {" "}E-mail:
+              <span className={styles.paragrafoMensagemSpanEmail}>
+                admin@meucrm.com | 
+              </span>
+              {" "}Senha:{" "}
+              <span className={styles.paragrafoMensagemSpanSenha}>
+                123456
+              </span>
+            </p>
+
+            
+          </form>
+
+          <footer className={styles.rodape}>
+            Desenvolvido por Bruna Caroline Fraga
+          </footer>
+
+        </section>
       </main>
-    </div>
   );
 }
