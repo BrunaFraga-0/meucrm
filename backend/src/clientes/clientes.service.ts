@@ -3,7 +3,7 @@ import { ILike, Repository } from 'typeorm';
 import { Cliente } from './cliente.entity';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
-import { ConflictException, Injectable, NotFoundException, Query } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class ClientesService {
@@ -26,7 +26,7 @@ export class ClientesService {
     return cliente;
   }
 
-  async listar(@Query('busca') busca?: string): Promise<Cliente[]>{
+  async listar(busca?: string): Promise<Cliente[]>{
     const termo = busca?.trim();
 
     if(!termo) {
