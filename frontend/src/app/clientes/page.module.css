@@ -1,0 +1,19 @@
+.main {
+  min-height: 100vh;
+  padding: 32px;
+}
+
+.telaClientes {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.cabecalho {
+  margin-bottom: 24px;
+}
+
+.mensagemErro {
+  margin-bottom: 16px;
+  color: #b91c1c;
+}
