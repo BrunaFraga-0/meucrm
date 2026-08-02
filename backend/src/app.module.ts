@@ -5,7 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ClientesModule } from './clientes/clientes.module';
+
 import { AuthModule } from './auth/auth.module';
+import { BullModule } from '@nestjs/bullmq';
 
 @Module({
   imports: [
@@ -25,10 +27,16 @@ import { AuthModule } from './auth/auth.module';
     }),
     ClientesModule,
     AuthModule,
+    BullModule.forRoot({
+      connection: {
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT),
+      }}),
   ],
   controllers: [AppController],
   providers: [AppService],
 })
+
 export class AppModule {}
 
 
