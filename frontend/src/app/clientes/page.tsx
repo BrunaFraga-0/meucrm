@@ -71,7 +71,7 @@ export default function ClientesPage() {
     void fetchClientes(token);
   }, [router, buscaAplicada]);
 
-  const pesquisar = (evento: SyntheticEvent<HTMLFormElement>) => {
+  const buscar = (evento: SyntheticEvent<HTMLFormElement>) => {
     evento.preventDefault();
     setBuscaAplicada(busca.trim());
   };
@@ -141,6 +141,51 @@ export default function ClientesPage() {
     }
   };
 
+  const excluir = async (id: string) => {
+  const confirmou = window.confirm(
+    "Tem certeza de que deseja excluir este cliente?",
+  );
+
+  if (!confirmou) {
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    router.replace("/");
+    return;
+  }
+
+  try {
+    const resposta = await fetch(`http://localhost:3000/clientes/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (resposta.status === 401) {
+      localStorage.removeItem("token");
+      router.replace("/");
+      return;
+    }
+
+    if (!resposta.ok) {
+      setMensagem("Não foi possível excluir o cliente.");
+      return;
+    }
+
+    setClientes((clientesAtuais) =>
+      clientesAtuais.filter((cliente) => cliente.id !== id),
+    );
+
+    setMensagem("Cliente excluído com sucesso.");
+  } catch {
+    setMensagem("Não foi possível conectar ao servidor.");
+  }
+};
+
   return (
     <main className={styles.main}>
         <section className={styles.telaClientes}>
@@ -153,7 +198,7 @@ export default function ClientesPage() {
             <button type="button" onClick={sair}>Sair</button>
           </header>
 
-          <form onSubmit={pesquisar}>
+          <form onSubmit={buscar}>
             <label htmlFor="busca">Buscar cliente por nome</label>
 
             <input
@@ -267,7 +312,7 @@ export default function ClientesPage() {
                     <td>{cliente.empresa ?? "-"}</td>
                     <td>
                       <button type="button">Editar</button>
-                      <button type="button">Excluir</button>
+                      <button type="button" onClick={() => excluir(cliente.id)}>Excluir</button>
                     </td>
                   </tr>
                 ))
