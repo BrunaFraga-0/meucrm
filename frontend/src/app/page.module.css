@@ -23,11 +23,14 @@
   flex: 1;
   width: 100%;
   max-width: 800px;
+  min-height: 100vh;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
+  align-items: center;
+  justify-content: center;
+  background-color: #f3f4f6;
+  color: #1f2937;
   padding: 120px 60px;
+  text-align: center;
 }
 
 .intro {
@@ -46,6 +49,7 @@
   letter-spacing: -2.4px;
   text-wrap: balance;
   color: var(--text-primary);
+  text-align: center;
 }
 
 .intro p {
@@ -54,6 +58,7 @@
   line-height: 32px;
   text-wrap: balance;
   color: var(--text-secondary);
+  text-align: center;
 }
 
 .intro a {
@@ -139,4 +144,31 @@ a.secondary {
     --button-secondary-hover: #1a1a1a;
     --button-secondary-border: #1a1a1a;
   }
+}
+
+.telaDeLogin {
+  width: 100%;
+  max-width: 440px;
+  padding: 32px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: #1f2937;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.formEmail,
+.formSenha {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.form input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #9ca3af;
+  border-radius: 6px;
+  background-color: #ffffff;
+  color: #111827;
 }
