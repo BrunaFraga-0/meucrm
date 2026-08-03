@@ -230,142 +230,151 @@ export default function ClientesPage() {
         <section className={styles.telaClientes}>
           
           <header className={styles.cabecalho}>
-            <h1 className={styles.titulo}>Clientes</h1>
+            <div className={styles.identificacao}>
+              <h1 className={styles.titulo}>MeuCRM</h1>
+              <h2 className={styles.subtitulo}>Gerenciamento de Clientes</h2>
+            </div>
 
-            <h2 className={styles.subtitulo}>Sistema de Gerenciamento</h2>
-
-            <button type="button" onClick={sair}>Sair</button>
+            <button className={styles.botaoSair} type="button" onClick={sair}>Sair</button>
           </header>
 
-          <form onSubmit={buscar}>
+          <form className={styles.busca} onSubmit={buscar}>
             <label htmlFor="busca">Buscar cliente por nome</label>
 
-            <input
-              id="busca"
-              type="search"
-              placeholder="Digite o nome do cliente"
-              value={busca}
-              onChange={(evento) => setBusca(evento.target.value)}/>
+            <div className={styles.linhaBusca}>
+              <input
+                id="busca"
+                type="search"
+                placeholder="Digite o nome do cliente"
+                value={busca}
+                onChange={(evento) => setBusca(evento.target.value)}/>
 
-            <button type="submit">Buscar</button>
+              <button className={styles.botaoPrimario} type="submit">Buscar</button>
 
-            <button type="button" onClick={() => {
-              setBusca("");
-              setBuscaAplicada("");
-            }}>Limpar
-            </button>
+              <button className={styles.botaoSecundario} type="button" onClick={() => {
+                setBusca("");
+                setBuscaAplicada("");
+              }}>Limpar
+              </button>
+            </div>
           </form>
 
-          {mensagem && (<p className={styles.mensagemErro}>{mensagem}</p>)}
+          {mensagem && (<p className={styles.mensagem}>{mensagem}</p>)}
 
           <h3 className={styles.subtituloCadastroEdicao}>
             {clienteEmEdicao ? "Editar Cliente" : "Cadastrar Cliente"}
           </h3>
 
-          <form onSubmit={cadastrar}>
-            <div>
-              <label htmlFor="nome">Nome</label>
-              <input
-                id="nome"
-                name="nome"
-                type="text"
-                value={nome}
-                onChange={(evento) => setNome(evento.target.value)}
-                required
-              />
-            </div>
+          <form className={styles.formCadastro} onSubmit={cadastrar}>
+            <div className={styles.campos}>
+              <div>
+                <label htmlFor="nome">Nome</label>
+                <input
+                  id="nome"
+                  name="nome"
+                  type="text"
+                  value={nome}
+                  onChange={(evento) => setNome(evento.target.value)}
+                  required
+                />
+              </div>
+            
+              <div>
+                <label htmlFor="email">E-mail</label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="nome@dominio.com"
+                  title="Digite o email no formato nome@dominio.com"
+                  value={email}
+                  onChange={(evento) => setEmail(evento.target.value)}
+                  required
+                />
+              </div>
 
-            <div>
-              <label htmlFor="email">E-mail</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="nome@dominio.com"
-                title="Digite o email no formato nome@dominio.com"
-                value={email}
-                onChange={(evento) => setEmail(evento.target.value)}
-                required
-              />
-            </div>
+              <div>
+                <label htmlFor="telefone">Telefone</label>
+                <input
+                  id="telefone"
+                  name="telefone"
+                  type="tel"
+                  placeholder="(XX) 9XXXX-XXXX"
+                  pattern="\([1-9]{2}\) 9[0-9]{4}-[0-9]{4}"
+                  title="Digite o telefone no formato (XX) 9XXXX-XXXX"
+                  value={telefone}
+                  onChange={(evento) => setTelefone(evento.target.value)}
+                  required
+                />
+              </div>
 
-            <div>
-              <label htmlFor="telefone">Telefone</label>
-              <input
-                id="telefone"
-                name="telefone"
-                type="tel"
-                placeholder="(XX) 9XXXX-XXXX"
-                pattern="\([1-9]{2}\) 9[0-9]{4}-[0-9]{4}"
-                title="Digite o telefone no formato (XX) 9XXXX-XXXX"
-                value={telefone}
-                onChange={(evento) => setTelefone(evento.target.value)}
-                required
-              />
-            </div>
+              <div>
+                <label htmlFor="empresa">Empresa</label>
+                <input
+                  id="empresa"
+                  name="empresa"
+                  type="text"
+                  value={empresa}
+                  onChange={(evento) => setEmpresa(evento.target.value)}
+                />
+              </div>
 
-            <div>
-              <label htmlFor="empresa">Empresa</label>
-              <input
-                id="empresa"
-                name="empresa"
-                type="text"
-                value={empresa}
-                onChange={(evento) => setEmpresa(evento.target.value)}
-              />
-            </div>
-
-            <div>
-              <label htmlFor="observacoes">Observações</label>
-              <textarea
-                id="observacoes"
-                name="observacoes"
-                value={observacoes}
-                onChange={(evento) => setObservacoes(evento.target.value)}
-              />
+              <div className={styles.campoObservacoes}>
+                <label htmlFor="observacoes">Observações</label>
+                <textarea
+                  id="observacoes"
+                  name="observacoes"
+                  value={observacoes}
+                  onChange={(evento) => setObservacoes(evento.target.value)}
+                />
+              </div>
             </div>
             
-            <button type="submit" disabled={salvando}>
-              {salvando? "Salvando..." : clienteEmEdicao ? "Salvar alterações" : "Cadastrar cliente"}
-            </button>
-
-            {clienteEmEdicao && (<button type="button" onClick={cancelarEdicao}>Cancelar edição</button>)}
+            <div className={styles.acoesFormulario}>
+              <button className={styles.botaoPrimario} type="submit" disabled={salvando}>
+                {salvando? "Salvando..." : clienteEmEdicao ? "Salvar Alterações" : "Cadastrar Cliente"}
+              </button>
+            
+              {clienteEmEdicao && (<button className={styles.botaoSecundario} type="button" onClick={cancelarEdicao}>Cancelar Edição</button>)}
+            </div>
           </form>
 
-          <table>
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>E-mail</th>
-                <th>Telefone</th>
-                <th>Empresa</th>
-                <th>Observações</th>
-                <th>Ações</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {clientes.length === 0 ? (
+          <div className={styles.tabelaContainer}>
+            <table className={styles.tabela}>
+              <thead>
                 <tr>
-                  <td colSpan={6}>Nenhum cliente cadastrado.</td>
+                  <th>Nome</th>
+                  <th>E-mail</th>
+                  <th>Telefone</th>
+                  <th>Empresa</th>
+                  <th>Observações</th>
+                  <th>Ações</th>
                 </tr>
-              ) : (
-                clientes.map((cliente) => (
-                  <tr key={cliente.id}>
-                    <td>{cliente.nome}</td>
-                    <td>{cliente.email}</td>
-                    <td>{cliente.telefone}</td>
-                    <td>{cliente.empresa ?? "-"}</td>
-                    <td>{cliente.observacoes ?? "-"}</td>
-                    <td>
-                      <button type="button" onClick={() => editar(cliente)}>Editar</button>
-                      <button type="button" onClick={() => excluir(cliente.id)}>Excluir</button>
-                    </td>
+              </thead>
+
+              <tbody>
+                {clientes.length === 0 ? (
+                  <tr>
+                    <td className={styles.semClientes} colSpan={6}>Nenhum cliente cadastrado.</td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  clientes.map((cliente) => (
+                    <tr key={cliente.id}>
+                      <td>{cliente.nome}</td>
+                      <td>{cliente.email}</td>
+                      <td>{cliente.telefone}</td>
+                      <td>{cliente.empresa ?? "-"}</td>
+                      <td>{cliente.observacoes ?? "-"}</td>
+                      <td className={styles.acoesTabela}>
+                        <button className={styles.botaoEditar} type="button" onClick={() => editar(cliente)}>Editar</button>
+                        <button className={styles.botaoExcluir} type="button" onClick={() => excluir(cliente.id)}>Excluir</button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
 
         </section>
       </main>

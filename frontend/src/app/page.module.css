@@ -1,174 +1,154 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
-}
-
 .main {
   display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
   min-height: 100vh;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #f3f4f6;
-  color: #1f2937;
-  padding: 120px 60px;
-  text-align: center;
-}
-
-.intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
-}
-
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
-  text-align: center;
-}
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-  text-align: center;
-}
-
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
-}
-
-.ctas a {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
-  cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
-}
-
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
-}
-
-a.secondary {
-  border-color: var(--button-secondary-border);
-}
-
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-}
-
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
-  }
+  padding: 32px 20px;
+  background:
+    radial-gradient(circle at top left, rgba(79, 70, 229, 0.2), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(8, 145, 178, 0.16), transparent 30%),
+    #eef2ff;
 }
 
 .telaDeLogin {
   width: 100%;
-  max-width: 440px;
-  padding: 32px;
-  border-radius: 12px;
-  background-color: #ffffff;
-  color: #1f2937;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  max-width: 460px;
+  padding: 42px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: var(--sombra);
+}
+
+.cabecalho {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.tituloCategoria {
+  display: inline-block;
+  color: var(--cor-primaria);
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+}
+
+.subtitulo {
+  margin-top: 8px;
+}
+
+.subtituloCategoria {
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.paragrafo {
+  margin-bottom: 24px;
+  color: var(--cor-texto-suave);
+  text-align: center;
+}
+
+.mensagemErro {
+  min-height: 22px;
+  margin-bottom: 10px;
+  color: var(--cor-erro);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
 .formEmail,
 .formSenha {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  text-align: left;
+  gap: 7px;
+}
+
+.form label {
+  color: var(--cor-texto);
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .form input {
   width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #9ca3af;
-  border-radius: 6px;
-  background-color: #ffffff;
-  color: #111827;
+  padding: 13px 14px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+  background: #f8fafc;
+  color: var(--cor-texto);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.form input:focus {
+  border-color: var(--cor-primaria);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.14);
+}
+
+.botaoEntrar {
+  width: 100%;
+  padding: 13px 20px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--cor-primaria), var(--cor-secundaria));
+  color: #ffffff;
+  font-weight: 700;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.botaoEntrar:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.22);
+}
+
+.paragrafoMensagem {
+  padding: 13px;
+  border: 1px solid #c7d2fe;
+  border-radius: 10px;
+  background: #eef2ff;
+  color: var(--cor-texto-suave);
+  font-size: 0.8rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.paragrafoMensagemSpan {
+  display: block;
+  color: var(--cor-primaria-escura);
+  font-weight: 700;
+}
+
+.paragrafoMensagemSpanEmail,
+.paragrafoMensagemSpanSenha {
+  color: var(--cor-texto);
+  font-weight: 700;
+}
+
+.rodape {
+  margin-top: 28px;
+  color: var(--cor-texto-suave);
+  font-size: 0.78rem;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .main {
+    padding: 20px 14px;
+  }
+
+  .telaDeLogin {
+    padding: 30px 22px;
+    border-radius: 16px;
+  }
+
+  .tituloCategoria {
+    font-size: 2rem;
+  }
 }
