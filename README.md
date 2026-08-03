@@ -292,7 +292,6 @@ meucrm/
 │   ├── nest-cli.json
 │   ├── package-lock.json
 │   ├── package.json
-│   ├── README.md
 │   ├── tsconfig.build.json
 │   ├── tsconfig.json
 │   │
@@ -342,7 +341,6 @@ meucrm/
 │   ├── next.config.ts
 │   ├── package-lock.json
 │   ├── package.json
-│   ├── README.md
 │   ├── tsconfig.json
 │   │
 │   └── src/
