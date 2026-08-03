@@ -15,5 +15,42 @@ services:
     ports: 
       - "6379:6379"
 
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      PORT: 3000
+
+      PG_HOST: postgres
+      PG_PORT: 5432
+      PG_DATABASE: meucrm
+      PG_USER: postgres
+      PG_PASSWORD: postgres
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+      ADMIN_NAME: Admin
+      ADMIN_EMAIL: admin@meucrm.com
+      ADMIN_PASSWORD: "123456"
+
+      JWT_SECRET: altere-para-chave-secreta-docker-meucrm
+      JWT_EXPIRES_IN: 1800
+    command: >
+      sh -c "npm run migration:run:prod &&
+      npm run seed:admin:prod &&
+      npm run start:prod"
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3001:3001"
+    depends_on:
+      - backend
+  
 volumes:
   pgdata:
