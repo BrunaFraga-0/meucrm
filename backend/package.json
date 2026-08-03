@@ -11,7 +11,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main.js",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -19,7 +19,10 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "typeorm": "typeorm-ts-node-commonjs -d src/database/data-source.ts",
-    "seed:admin": "ts-node seeds/admin.seed.ts"
+    "seed:admin": "ts-node seeds/admin.seed.ts",
+    "typeorm:prod": "typeorm -d dist/src/database/data-source.js",
+    "migration:run:prod": "npm run typeorm:prod -- migration:run",
+    "seed:admin:prod": "node dist/seeds/admin.seed.js"
   },
   "dependencies": {
     "@nestjs/bullmq": "^11.0.4",

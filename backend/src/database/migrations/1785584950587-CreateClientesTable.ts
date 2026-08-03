@@ -5,6 +5,10 @@ export class CreateClientesTable1785584950587 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
+      CREATE EXTENSION IF NOT EXISTS "uuid-ossp"
+    `);
+
+    await queryRunner.query(`
             CREATE TABLE "clientes" (
               "id" uuid NOT NULL DEFAULT uuid_generate_v4(), 
               "nome" character varying(100) NOT NULL, 
