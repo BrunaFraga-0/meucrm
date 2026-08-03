@@ -4,118 +4,56 @@
 
 # 📝 Sobre o Projeto
 
-O **MeuCRM** é uma aplicação web full stack para cadastro e gerenciamento de clientes, desenvolvida como parte de um case técnico para a posição de **Desenvolvedor Full Stack Júnior**.
+O **MeuCRM** é uma aplicação web full stack para cadastro e gerenciamento de clientes, desenvolvida como parte de um case técnico para a posição de **Desenvolvedora Full Stack Júnior**.
 
-O sistema tem como objetivo permitir que um usuário autenticado gerencie sua base de clientes por meio de uma interface web, realizando operações de cadastro, listagem, busca, consulta, atualização e exclusão.
-
-O backend está sendo desenvolvido como uma **API REST** com **NestJS**, **TypeScript**, **TypeORM** e **PostgreSQL**. A infraestrutura utiliza **Docker Compose** para executar PostgreSQL e Redis. O frontend será desenvolvido com **Next.js**, **React** e **TypeScript**.
-
----
-
-# 🎯 Objetivo
-
-Aplicar, na prática, conceitos de desenvolvimento full stack e construção de aplicações web, incluindo:
-
-- API REST;
-- arquitetura modular com NestJS;
-- validação de dados com DTOs;
-- persistência com PostgreSQL e TypeORM;
-- controle de alterações do banco com migrations;
-- autenticação e autorização com JWT;
-- processamento assíncrono com BullMQ e Redis;
-- desenvolvimento de interfaces com Next.js e React;
-- conteinerização com Docker;
-- versionamento com Git e GitHub;
-- documentação técnica;
-- integração entre frontend e backend.
+O sistema tem como objetivo permitir que um usuário autenticado gerencie sua base de clientes por meio de uma interface web, realizando operações de cadastro, listagem, busca, atualização e exclusão. O backend também utiliza uma fila assíncrona para simular o envio de uma mensagem de boas-vindas após cada novo cadastro.
 
 ---
 
 # Status do projeto
 
-🚧 Projeto em desenvolvimento.
+**Versão funcional concluída para entrega do case.**
 
-A infraestrutura e o CRUD de clientes no backend estão concluídos. As próximas etapas são a autenticação com JWT, a fila de boas-vindas com BullMQ e Redis e o desenvolvimento do frontend.
+Os requisitos obrigatórios foram implementados: login, autenticação JWT, proteção de acesso, CRUD de clientes, busca por nome, persistência em PostgreSQL, migrations, seed do administrador, fila com BullMQ e Redis e execução completa com Docker Compose.
+
+O frontend cumpre o fluxo principal do sistema, porém foi mantido intencionalmente simples devido ao prazo do case e ao fato de Next.js e React serem tecnologias novas para mim. As principais possibilidades de evolução estão registradas em [Melhorias futuras](#melhorias-futuras).
 
 ---
 
-# Progresso do desenvolvimento
+## Sumário
 
-### Planejamento e infraestrutura
+- [Sobre o projeto](#-sobre-o-projeto)
+- [Funcionalidades](#-funcionalidades)
+- [Tecnologias](#-tecnologias)
+- [Execução com Docker](#-como-executar-o-projeto-completo-com-docker)
+- [Execução em desenvolvimento](#-como-executar-em-ambiente-de-desenvolvimento)
+- [Arquitetura](#-arquitetura-e-fluxo-da-aplicação)
+- [Endpoints](#-endpoints-da-api)
+- [Melhorias futuras](#-melhorias-futuras)
+- [Uso de IA](#-uso-de-inteligência-artificial-e-fontes-de-estudo)
 
-- [x] Análise dos requisitos do case
-- [x] Planejamento inicial
-- [x] Definição da estrutura do projeto
-- [x] Configuração do repositório e fluxo de branches
-- [x] Inicialização do backend com NestJS e TypeScript
-- [x] Configuração do Docker Compose
-- [x] Configuração do PostgreSQL em container
-- [x] Configuração do Redis em container
-- [x] Configuração das variáveis de ambiente
-- [x] Integração entre NestJS, TypeORM e PostgreSQL
+---
 
-### Banco de dados
+# 📚 Funcionalidades
 
-- [x] Modelagem da entidade Cliente
-- [x] Configuração do DataSource do TypeORM
-- [x] Configuração dos scripts de migration
-- [x] Migration inicial da tabela `clientes`
-- [x] Execução e validação da migration no PostgreSQL
-- [ ] Seed do usuário administrador — 🚧 **Em construção**
-
-### Backend — clientes
-
-- [x] Entity de Cliente
-- [x] DTO de criação
-- [x] DTO de atualização
-- [x] Validação automática com `ValidationPipe`
-- [x] Cadastro de clientes
-- [x] Listagem de clientes
-- [x] Busca de clientes por nome
-- [x] Consulta de cliente por UUID
-- [x] Atualização de clientes com `PUT`
-- [x] Exclusão de clientes
-- [x] Validação de email único
-- [x] Tratamento de cliente não encontrado
-- [x] Validação dos endpoints por requisições HTTP
-
-### Autenticação e segurança
-
-- [x] Módulo de autenticação
-- [x] DTO de login 
-- [x] Login com email e senha 
-- [x] Geração de token JWT 
-- [x] Estratégia e guard de autenticação 
-- [x] Proteção das rotas de clientes 
-
-### Fila e processamento assíncrono
-
-- [x] Redis disponível no Docker Compose
-- [x] Configuração do BullMQ 
-- [x] Fila `welcome-email` 
-- [x] Adição de job após o cadastro do cliente 
-- [x] Processor de boas-vindas 
-- [x] Log de processamento no terminal 
-
-### Frontend
-
-- [ ] Inicialização do projeto Next.js — 🚧 **Em construção**
-- [ ] Tela de login — 🚧 **Em construção**
-- [ ] Proteção e redirecionamento de rotas — 🚧 **Em construção**
-- [ ] Tabela de clientes — 🚧 **Em construção**
-- [ ] Campo de busca por nome — 🚧 **Em construção**
-- [ ] Formulário de cadastro — 🚧 **Em construção**
-- [ ] Formulário de edição — 🚧 **Em construção**
-- [ ] Confirmação de exclusão — 🚧 **Em construção**
-- [ ] Integração com a API — 🚧 **Em construção**
-
-### Entrega
-
-- [x] Arquivo `.env.example` do backend
-- [ ] README final revisado — 🚧 **Em construção**
-- [ ] Credenciais do administrador documentadas — 🚧 **Em construção**
-- [ ] Instruções do frontend — 🚧 **Em construção**
-- [ ] Revisão final e preparação da branch `main` — 🚧 **Em construção**
+- Login com e-mail e senha;
+- Criação automática do usuário administrador por seed;
+- Senhas armazenadas como hash com `bcryptjs`;
+- Geração e validação de token JWT;
+- Proteção dos endpoints de clientes no backend;
+- Redirecionamento para a tela de login quando não há token ou ele é recusado pela API;
+- Cadastro de clientes;
+- Listagem de clientes em tabela;
+- Busca por nome sem diferenciar maiúsculas e minúsculas;
+- Edição de clientes;
+- Exclusão com confirmação;
+- Validação dos dados de entrada;
+- Prevenção de e-mails duplicados;
+- Persistência em PostgreSQL com TypeORM e migrations;
+- Criação de um job na fila `welcome-email` após o cadastro;
+- Processamento do job com BullMQ e Redis;
+- Simulação do envio de boas-vindas por log no terminal;
+- Execução de frontend, backend, PostgreSQL e Redis com Docker Compose.
 
 ---
 
@@ -128,55 +66,122 @@ A infraestrutura e o CRUD de clientes no backend estão concluídos. As próxima
 - NestJS
 - TypeORM
 - PostgreSQL
-- `class-validator`
-- `class-transformer`
-- JWT — 🚧 **Em construção**
-- BullMQ — 🚧 **Em construção**
+- `class-validator` e `class-transformer`
+- JWT e Passport
+- `bcryptjs`
+- BullMQ
 - Redis
 
 ## Frontend
 
-> 🚧 **Em construção**
+- Next.js com App Router;
+- React;
+- TypeScript;
+- CSS Modules;
+- Fetch API.
 
-- Next.js
-- React
-- TypeScript
-- CSS
+## Infraestrutura e desenvolvimento
 
-## Infraestrutura e ferramentas
-
-- Docker
-- Docker Compose
-- Git
-- GitHub
-- Thunder Client
-- pgAdmin
+- Docker e Docker Compose
+- Git e GitHub
+- Thunder Client e Postman para validação manual dos endpoints
+- pgAdmin para apoio na inspeção do banco de dados
 
 ---
 
-# 📋 Pré-requisitos
+# 📋 Como executar o projeto completo com Docker
 
-Antes de executar o projeto, certifique-se de possuir instalado:
+Esta é a maneira recomendada para avaliar e utilizar a aplicação. O Docker Compose inicia os quatro serviços e o backend executa as migrations e o seed automaticamente.
+ 
+## Pré-requisitos
 
-- Node.js;
-- npm;
 - Git;
-- Docker;
-- Docker Compose;
-- Visual Studio Code ou outra IDE compatível.
+- Docker Desktop ou Docker Engine com Docker Compose.
 
-O pgAdmin e o Thunder Client são opcionais, mas podem ser utilizados para visualizar o banco de dados e testar os endpoints da API.
+Não é necessário instalar Node.js, npm, PostgreSQL ou Redis localmente para esta forma de execução.
 
----
-
-# 🚀 Instalação e Execução
-
-## 1. Clone o repositório
-
-> 🚧 O endereço definitivo do repositório será inserido antes da entrega.
+## 🚀 Instalação e Execução
+### 1. Clone o repositório
 
 ```bash
-git clone URL_DO_REPOSITORIO
+git clone https://github.com/BrunaFraga-0/meucrm.git
+cd meucrm
+```
+
+### 2. Construa e inicie todos os serviços
+
+```bash
+docker compose up --build
+```
+
+Na primeira execução, o comando pode levar alguns minutos para baixar as imagens, instalar as dependências e construir as aplicações.
+
+Ao iniciar, o backend executa automaticamente:
+
+1. as migrations do TypeORM;
+2. o seed do usuário administrador;
+3. a API NestJS.
+
+O seed é idempotente: se o administrador já existir, ele não será duplicado.
+
+### 3. Acesse a aplicação
+
+- Frontend: [http://localhost:3001](http://localhost:3001)
+- API: [http://localhost:3000](http://localhost:3000)
+
+Credenciais para demonstração:
+
+```text
+E-mail: admin@meucrm.com
+Senha: 123456
+```
+
+Depois do login, a aplicação direciona o usuário à página de clientes, onde todas as operações do CRUD podem ser realizadas.
+
+Ao cadastrar um cliente, o terminal do Docker Compose exibirá o processamento da fila com uma mensagem semelhante a:
+
+```text
+Enviando boas-vindas para João <joao@empresa.com>
+```
+
+### 4. Encerrar a aplicação
+
+Em outro terminal, na raiz do projeto, execute:
+
+```bash
+docker compose down
+```
+
+Os dados do PostgreSQL permanecem no volume `pgdata`. Para remover também o banco criado e reiniciar o projeto sem dados, use:
+
+```bash
+docker compose down -v
+```
+
+> Atenção: a opção `-v` exclui permanentemente os dados armazenados no volume do projeto.
+
+---
+
+# 📋 Como executar em ambiente de desenvolvimento
+
+Nesta opção, apenas PostgreSQL e Redis são executados em containers. Backend e frontend são iniciados localmente, com atualização automática durante as alterações no código.
+
+## Pré-requisitos
+
+- Git;
+- Node.js 22 ou versão compatível;
+- npm;
+- Docker Desktop ou Docker Engine com Docker Compose;
+- Visual Studio Code ou outra IDE compatível.
+
+O pgAdmin, o Thunder Client e o Postman são opcionais, mas podem ser utilizados para visualizar o banco de dados e testar os endpoints da API.
+
+## 🚀 Instalação e Execução
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/BrunaFraga-0/meucrm.git
 ```
 
 Acesse a pasta do projeto:
@@ -185,14 +190,10 @@ Acesse a pasta do projeto:
 cd meucrm
 ```
 
----
-
-## 2. Inicie a infraestrutura
-
-Na raiz do projeto, execute:
+Rode o comando:
 
 ```bash
-docker compose up -d
+docker compose up -d postgres redis
 ```
 
 Esse comando inicia os containers do:
@@ -206,141 +207,113 @@ Para verificar o estado dos containers:
 docker compose ps
 ```
 
-Para encerrar os containers:
+No ambiente local, o PostgreSQL é exposto na porta `5433` para evitar conflito com uma possível instalação local na porta padrão `5432`. O Redis utiliza a porta `6379`.
+
+### 2. Configure e inicie o backend
+
+Em um terminal:
+
+```bash
+cd backend
+npm install
+cp .env.example .env
+npm run typeorm -- migration:run
+npm run seed:admin
+npm run start:dev
+```
+
+A API estará disponível em [http://localhost:3000](http://localhost:3000).
+
+O arquivo `backend/.env.example` já contém os valores necessários para o desenvolvimento local:
+
+```env
+PORT=3000
+
+PG_HOST=localhost
+PG_PORT=5433
+PG_TIME_OUT_MS=30000
+PG_DATABASE=meucrm
+PG_USER=postgres
+PG_PASSWORD=postgres
+
+ADMIN_NAME=Admin
+ADMIN_EMAIL=admin@meucrm.com
+ADMIN_PASSWORD=123456
+
+JWT_SECRET=insira-sua_chave_secreta_aqui
+JWT_EXPIRES_IN=1800
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+```
+
+> O `.env.example` possui apenas valores de demonstração. Em uma aplicação publicada, senhas e segredos devem ser substituídos por valores fortes e mantidos fora do repositório.
+
+### 3. Configure e inicie o frontend
+
+Em um segundo terminal, a partir da raiz do projeto:
+
+```bash
+cd frontend
+npm install
+npm run dev -- -p 3001
+```
+
+Acesse [http://localhost:3001](http://localhost:3001) e utilize as credenciais do administrador.
+
+> Nesta versão, o endereço da API está definido no frontend como `http://localhost:3000`. A configuração por variável de ambiente é uma melhoria futura.
+
+### 4. Encerrar a infraestrutura local
+
+Depois de interromper backend e frontend com `Ctrl + C`, execute na raiz:
 
 ```bash
 docker compose down
 ```
 
-> Os dados do PostgreSQL são mantidos em volume Docker, conforme a configuração do `docker-compose.yml`.
-
 ---
 
-## 3. Instale as dependências do backend
+# 📂 Arquitetura e fluxo da aplicação
 
-Acesse a pasta do backend:
-
-```bash
-cd backend
-```
-
-Instale as dependências:
-
-```bash
-npm install
-```
-
----
-
-## 4. Configure as variáveis de ambiente
-
-Crie o arquivo `.env` a partir do exemplo:
-
-```bash
-cp .env.example .env
-```
-
-O backend utiliza variáveis de ambiente para definir a porta da aplicação e os dados de conexão com o PostgreSQL.
-
-Exemplo:
-
-```env
-PORT=3000
-PG_HOST=localhost
-PG_PORT=5433
-PG_DATABASE=meucrm
-PG_USER=postgres
-PG_PASSWORD=postgres
-```
-
-> Nunca envie o arquivo `.env` para o repositório. Utilize o `.env.example` como modelo, sem credenciais sensíveis.
-
-As variáveis de autenticação JWT e fila serão documentadas quando essas funcionalidades forem implementadas.
-
----
-
-## 5. Execute as migrations
-
-Com PostgreSQL ativo, execute:
-
-```bash
-npm run typeorm -- migration:run
-```
-
-Esse comando aplica as migrations pendentes e cria a estrutura necessária no banco de dados.
-
-Para consultar as migrations:
-
-```bash
-npm run typeorm -- migration:show
-```
-
----
-
-## 6. Inicie o backend
-
-### Ambiente de desenvolvimento
-
-```bash
-npm run start:dev
-```
-
-A API estará disponível em:
-
-```text
-http://localhost:3000
-```
-
-### Aplicação compilada
-
-Primeiro, compile o projeto:
-
-```bash
-npm run build
-```
-
-Depois, execute a versão compilada:
-
-```bash
-npm run start:prod
-```
-
----
-
-## 7. Inicie o frontend
-
-> 🚧 **Em construção.** Os comandos de instalação e execução serão adicionados após a criação do projeto Next.js.
-
----
-
-# 📜 Scripts do Backend
-
-| Comando | Descrição |
-|---|---|
-| `npm run start` | Inicia o backend |
-| `npm run start:dev` | Inicia o backend em modo de desenvolvimento e observa alterações |
-| `npm run build` | Compila o projeto NestJS |
-| `npm run start:prod` | Executa a versão compilada em `dist` |
-| `npm run format` | Formata os arquivos TypeScript com Prettier |
-| `npm run lint` | Executa o ESLint e aplica correções disponíveis |
-| `npm run test` | Executa os testes unitários |
-| `npm run test:e2e` | Executa os testes de ponta a ponta |
-| `npm run test:cov` | Executa os testes e gera o relatório de cobertura |
-| `npm run typeorm -- migration:show` | Lista as migrations e seus estados |
-| `npm run typeorm -- migration:run` | Executa as migrations pendentes |
-| `npm run typeorm -- migration:revert` | Reverte a última migration executada |
-
-> Os scripts de teste fazem parte da estrutura inicial do NestJS. A implementação de testes automatizados é considerada uma melhoria futura e um bônus do case.
-
----
-
-# 📂 Estrutura do Projeto
+O repositório possui dois projetos independentes, integrados pelo Docker Compose:
 
 ```text
 meucrm/
+├── .gitignore
+├── README.md
+├── docker-compose.yml
 │
 ├── backend/
+│   ├── .dockerignore
+│   ├── .env.example
+│   ├── .prettierrc
+│   ├── Dockerfile
+│   ├── eslint.config.mjs
+│   ├── nest-cli.json
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── README.md
+│   ├── tsconfig.build.json
+│   ├── tsconfig.json
+│   │
+│   ├── seeds/
+│   │   └── admin.seed.ts
+│   │
 │   ├── src/
+│   │   ├── app.controller.ts
+│   │   ├── app.module.ts
+│   │   ├── app.service.ts
+│   │   ├── main.ts
+│   │   │
+│   │   ├── auth/
+│   │   │   ├── dto/
+│   │   │   │   └── login.dto.ts
+│   │   │   ├── auth.controller.ts
+│   │   │   ├── auth.module.ts
+│   │   │   ├── auth.service.ts
+│   │   │   ├── jwt-auth.guard.ts
+│   │   │   └── jwt.strategy.ts
+│   │   │
 │   │   ├── clientes/
 │   │   │   ├── dto/
 │   │   │   │   ├── create-cliente.dto.ts
@@ -348,166 +321,109 @@ meucrm/
 │   │   │   ├── cliente.entity.ts
 │   │   │   ├── clientes.controller.ts
 │   │   │   ├── clientes.module.ts
-│   │   │   └── clientes.service.ts
+│   │   │   ├── clientes.service.ts
+│   │   │   └── welcome-email.processor.ts
 │   │   │
 │   │   ├── database/
-│   │   │   ├── migrations/
-│   │   │   └── data-source.ts
+│   │   │   ├── data-source.ts
+│   │   │   └── migrations/
+│   │   │       ├── 1785584950587-CreateClientesTable.ts
+│   │   │       └── 1785620017891-CreateUsuariosTable.ts
 │   │   │
-│   │   ├── app.controller.ts
-│   │   ├── app.module.ts
-│   │   ├── app.service.ts
-│   │   └── main.ts
-│   │
-│   ├── .env.example
-│   ├── package.json
-│   ├── package-lock.json
-│   ├── nest-cli.json
-│   └── tsconfig.json
+│   │   └── usuarios/
+│   │       └── usuario.entity.ts
 │
-├── frontend/                         # 🚧 Em construção
-├── .gitignore
-├── docker-compose.yml
-└── README.md
+├── frontend/
+│   ├── .dockerignore
+│   ├── .gitignore
+│   ├── Dockerfile
+│   ├── eslint.config.mjs
+│   ├── next-env.d.ts
+│   ├── next.config.ts
+│   ├── package-lock.json
+│   ├── package.json
+│   ├── README.md
+│   ├── tsconfig.json
+│   │
+│   └── src/
+│       └── app/
+│           ├── clientes/
+│           │   ├── page.module.css
+│           │   └── page.tsx
+│           ├── favicon.ico
+│           ├── globals.css
+│           ├── layout.tsx
+│           ├── page.module.css
+│           └── page.tsx
 ```
 
-As pastas de autenticação, filas e frontend serão adicionadas à árvore conforme forem implementadas.
+As pastas e os arquivos gerados automaticamente, como .git, node_modules, dist e .next, não foram representados por não fazerem parte do código-fonte que precisa ser analisado ou editado.
 
----
+No backend, a organização segue o padrão modular do NestJS:
 
-# 🔄 Arquitetura e Fluxo da Aplicação
+- **Controller:** recebe as requisições HTTP e encaminha os dados;
+- **DTO + ValidationPipe:** valida e transforma os dados recebidos;
+- **Service:** concentra regras de negócio e coordena banco e fila;
+- **Entity/Repository:** representa e acessa os dados no PostgreSQL;
+- **Guard + Strategy:** validam o JWT antes do acesso às rotas protegidas;
+- **Processor:** consome os jobs da fila em segundo plano.
 
-O backend utiliza a organização modular do NestJS. Cada módulo reúne controller, service, DTOs e entity relacionados à mesma funcionalidade.
-
-```mermaid
-flowchart TD
-    A["Cliente HTTP"] --> B["Controller"]
-    B --> C["DTO + ValidationPipe"]
-    C --> D["Service"]
-    D --> E["Repository TypeORM"]
-    E --> F[("PostgreSQL")]
-    F --> E
-    E --> D
-    D --> B
-    B --> A
-```
-
-### Exemplo: cadastro de cliente
+### Fluxo resumido do cadastro:
 
 ```text
-POST /clientes
-    → ClientesController
-        → CreateClienteDto + ValidationPipe
-            → ClientesService
-                → Repository<Cliente>
-                    → PostgreSQL
+Frontend
+  -> POST /clientes com Bearer Token
+  -> ClientesController
+  -> CreateClienteDto + ValidationPipe
+  -> ClientesService
+     -> PostgreSQL: salva o cliente
+     -> BullMQ: adiciona o job send-welcome
+  -> Redis
+  -> WelcomeEmailProcessor
+  -> log de boas-vindas no terminal
 ```
-
-Após a implementação da fila, o cadastro também adicionará um job assíncrono à fila `welcome-email`.
-
----
-
-# 📚 Funcionalidades do Sistema
-
-## Autenticação
-
-> 🚧 **Em construção**
-
-- Login com email e senha;
-- geração de token JWT;
-- proteção dos endpoints;
-- redirecionamento para login quando o usuário não estiver autenticado.
-
-## Clientes
-
-- Cadastrar cliente;
-- listar todos os clientes;
-- buscar clientes pelo nome;
-- consultar cliente por UUID;
-- atualizar cliente;
-- excluir cliente;
-- validar campos obrigatórios e opcionais;
-- impedir o cadastro de emails duplicados.
-
-## Fila de boas-vindas
-
-> 🚧 **Em construção**
-
-Após o cadastro de um novo cliente, a aplicação adicionará um job à fila `welcome-email`. Um processor consumirá o job e registrará no terminal uma mensagem semelhante a:
-
-```text
-[WelcomeEmailProcessor] Enviando boas-vindas para joao@empresa.com
-```
-
-## Interface web
-
-> 🚧 **Em construção**
-
-O frontend deverá disponibilizar:
-
-- tela de login;
-- tabela com nome, email, telefone, empresa e ações;
-- campo de busca por nome;
-- formulário de cadastro e edição;
-- confirmação antes da exclusão;
-- rotas protegidas.
 
 ---
 
 # 🌐 Endpoints da API
 
-## Clientes
+| Método | Endpoint | Descrição | Autenticação |
+| --- | --- | --- | --- |
+| `GET` | `/` | Verifica se a API está em execução | Não |
+| `POST` | `/auth/login` | Valida as credenciais e retorna o token JWT | Não |
+| `GET` | `/clientes` | Lista todos os clientes | Bearer Token |
+| `GET` | `/clientes?busca=nome` | Busca clientes por nome | Bearer Token |
+| `GET` | `/clientes/:id` | Consulta um cliente pelo UUID | Bearer Token |
+| `POST` | `/clientes` | Cadastra um cliente e adiciona o job de boas-vindas | Bearer Token |
+| `PUT` | `/clientes/:id` | Atualiza os dados de um cliente | Bearer Token |
+| `DELETE` | `/clientes/:id` | Exclui um cliente | Bearer Token |
 
-| Método | Endpoint | Descrição | Status |
-|---|---|---|---|
-| `POST` | `/clientes` | Cadastra um cliente | ✅ Implementado |
-| `GET` | `/clientes` | Lista todos os clientes | ✅ Implementado |
-| `GET` | `/clientes?busca=nome` | Busca clientes por nome | ✅ Implementado |
-| `GET` | `/clientes/:id` | Consulta um cliente pelo UUID | ✅ Implementado |
-| `PUT` | `/clientes/:id` | Atualiza um cliente | ✅ Implementado |
-| `DELETE` | `/clientes/:id` | Exclui um cliente | ✅ Implementado |
-
-## Autenticação
-
-> 🚧 **Em construção.** O endpoint de login será documentado após sua implementação.
+Mais detalhes sobre o token e o fluxo de login estão descritos na seção [Autenticação](#-autenticação).
 
 ---
 
-# ✅ Validações e Regras
+# ✅ Validações e Regras de Negócio
 
 - `nome`, `email` e `telefone` são obrigatórios;
-- `nome` possui limite de 100 caracteres;
-- `email` deve possuir formato válido e limite de 255 caracteres;
-- o email deve ser único;
-- `telefone` possui limite de 20 caracteres e deve seguir o formato definido pela API;
-- `empresa` é opcional e possui limite de 100 caracteres;
+- `nome` aceita até 100 caracteres;
+- `email` deve possuir formato válido, aceita até 255 caracteres e deve ser único;
+- `telefone` deve seguir o formato `(XX) 9XXXX-XXXX`, com DDD iniciado entre 1 e 9;
+- `empresa` é opcional e aceita até 100 caracteres;
 - `observacoes` é opcional;
-- o identificador do cliente é um UUID gerado automaticamente;
-- `criadoEm` é preenchido automaticamente pelo banco;
-- campos não declarados nos DTOs são rejeitados pelo `ValidationPipe`;
-- buscas por nome não diferenciam letras maiúsculas e minúsculas.
+- identificadores são UUIDs gerados automaticamente;
+- `criadoEm` é preenchido automaticamente;
+- propriedades que não existem no DTO são rejeitadas pelo `ValidationPipe`;
+- a busca remove espaços externos e utiliza comparação parcial sem diferenciar maiúsculas e minúsculas;
+- o usuário recebe uma mensagem genérica quando as credenciais são inválidas, sem revelar qual campo falhou;
+- o token expira após 1.800 segundos, conforme a configuração atual;
+- as rotas de clientes exigem JWT válido;
+- cada novo cliente gera um job na fila `welcome-email`.
 
 ---
 
-# 🗃 Banco de Dados
+# 🗃 Banco de Dados, migrations e seed
 
-O MeuCRM utiliza PostgreSQL como Sistema Gerenciador de Banco de Dados. O acesso aos dados é realizado com TypeORM, por meio de entities e repositories.
-
-## Migrations
-
-O projeto utiliza migrations do TypeORM para controlar a evolução da estrutura do banco. A sincronização automática está desativada:
-
-```ts
-synchronize: false
-```
-
-As migrations ficam em:
-
-```text
-backend/src/database/migrations/
-```
-
-A tabela `migrations`, mantida pelo TypeORM, registra quais alterações já foram executadas.
+O MeuCRM utiliza PostgreSQL para persistência dos dados. O acesso ao banco é realizado pelo TypeORM, por meio de entities e repositories.
 
 ## Tabela `clientes`
 
@@ -521,40 +437,131 @@ A tabela `migrations`, mantida pelo TypeORM, registra quais alterações já for
 | `observacoes` | `text` | Opcional |
 | `criado_em` | `timestamp` | Preenchimento automático com `now()` |
 
-## Seed
 
-> 🚧 **Em construção.** Será criado um usuário administrador fixo para permitir o login exigido no case.
+## Tabela `usuarios`
+
+| Coluna | Tipo | Regra |
+| --- | --- | --- |
+| `id` | UUID | Chave primária e geração automática |
+| `nome` | `varchar(100)` | Obrigatório |
+| `email` | `varchar(255)` | Obrigatório e único |
+| `senha` | `varchar(255)` | Obrigatório e armazenado como hash |
+
+O TypeORM utiliza `synchronize: false`. Portanto, a estrutura do banco é criada e atualizada exclusivamente pelas migrations versionadas.
+
+As migrations existentes criam:
+
+- a extensão necessária para geração de UUIDs;
+- a tabela `clientes`;
+- a tabela `usuarios`.
+
+O seed lê `ADMIN_NAME`, `ADMIN_EMAIL` e `ADMIN_PASSWORD`, gera o hash da senha com `bcryptjs` e cria o administrador somente se o e-mail ainda não existir.
+
+Comandos úteis no backend:
+
+| Comando | Descrição |
+| --- | --- |
+| `npm run typeorm -- migration:show` | Exibe as migrations e seus estados |
+| `npm run typeorm -- migration:run` | Executa as migrations pendentes em desenvolvimento |
+| `npm run typeorm -- migration:revert` | Reverte a última migration em desenvolvimento |
+| `npm run seed:admin` | Cria o administrador no ambiente de desenvolvimento |
 
 ---
 
 # 🔐 Autenticação
 
-> 🚧 **Em construção**
+A aplicação utiliza autenticação com **JWT (JSON Web Token)** para controlar o acesso às funcionalidades de gerenciamento de clientes.
 
-A aplicação utilizará autenticação com JWT. O fluxo previsto é:
+O usuário administrador é criado pelo seed do backend. Sua senha é transformada em hash com `bcryptjs` antes de ser armazenada no PostgreSQL.
+
+## Credenciais de demonstração
 
 ```text
-Email e senha
-    → endpoint de login
-        → validação das credenciais
-            → geração do token JWT
-                → acesso às rotas protegidas
+E-mail: admin@meucrm.com
+Senha: 123456
 ```
 
-As credenciais do usuário administrador serão incluídas nesta seção após a implementação do seed e da autenticação.
+## Fluxo de autenticação
+
+```text
+E-mail e senha
+    → POST /auth/login
+        → busca do usuário no PostgreSQL
+            → comparação da senha com bcryptjs
+                → geração do token JWT
+                    → armazenamento do token no frontend
+                        → envio do Bearer Token nas rotas protegidas
+```
+
+O endpoint de login retorna o token no seguinte formato:
+
+```json
+{
+  "access_token": "token-jwt"
+}
+```
+
+Para acessar os endpoints de clientes, o frontend envia o token no cabeçalho da requisição:
+
+```text
+Authorization: Bearer token-jwt
+```
+
+No backend, o `JwtAuthGuard` e a `JwtStrategy` verificam a validade do token antes de permitir o acesso às rotas de clientes.
+
+No frontend, o token é armazenado no `localStorage`. Quando ele não está disponível ou a API retorna o status `401 Unauthorized`, o usuário é redirecionado para a tela de login.
+
+Na configuração atual, o token expira após 1.800 segundos, equivalentes a 30 minutos.
 
 ---
 
 # 📬 BullMQ e Redis
 
-> 🚧 **Em construção**
+A aplicação utiliza `BullMQ` e `Redis` para realizar o processamento assíncrono da mensagem de boas-vindas.
 
-O Redis já está disponível na infraestrutura Docker. A próxima etapa será configurar o BullMQ para:
+Após o cadastro de um novo cliente, o backend adiciona um job chamado `send-welcome` à fila `welcome-email`, contendo o nome e o e-mail do cliente.
 
-1. criar a fila `welcome-email`;
-2. adicionar um job após o cadastro do cliente;
-3. processar o job assincronamente;
-4. registrar o envio simulado no terminal.
+O fluxo ocorre da seguinte forma:
+
+```text
+Cadastro do cliente
+    → dados salvos no PostgreSQL
+        → job adicionado à fila welcome-email
+            → job armazenado no Redis
+                → WelcomeEmailProcessor processa o job
+                    → mensagem registrada no terminal
+```
+
+O processor simula o envio da mensagem de boas-vindas por meio de um log semelhante a:
+
+```text
+Enviando boas-vindas para João <joao@empresa.com>
+```
+
+Não há integração com um serviço SMTP nesta versão. O envio real de e-mails não era obrigatório no case, e o registro no terminal comprova que o job foi adicionado e processado corretamente.
+
+---
+
+# Scripts principais
+
+### Backend
+
+| Comando | Descrição |
+| --- | --- |
+| `npm run start:dev` | Inicia o NestJS em modo de desenvolvimento |
+| `npm run build` | Compila o backend |
+| `npm run start:prod` | Executa a versão compilada |
+| `npm run lint` | Executa o ESLint e aplica as correções configuradas |
+| `npm run format` | Formata os arquivos TypeScript com Prettier |
+
+### Frontend
+
+| Comando | Descrição |
+| --- | --- |
+| `npm run dev -- -p 3001` | Inicia o Next.js em desenvolvimento na porta do projeto |
+| `npm run build` | Gera a build do frontend |
+| `npm run start -- -p 3001` | Executa a build na porta do projeto |
+| `npm run lint` | Executa o ESLint |
 
 ---
 
@@ -567,24 +574,41 @@ O projeto utiliza branches para separar o desenvolvimento das funcionalidades e 
 ```text
 main
 dev
+chore/*
 feat/*
 fix/*
+style/*
+docs/*
 ```
 
 - **main:** versão estável e preparada para entrega;
 - **dev:** integração das funcionalidades durante o desenvolvimento;
+- **chore/:** configurações, manutenção e revisão da estrutura do projeto;
 - **feat/:** desenvolvimento de novas funcionalidades;
-- **fix/:** correções específicas.
+- **fix/:** correções específicas;
+- **style/:** ajustes de formatação e aparência que não alteram as regras de negócio.
+- **docs/:** criação e atualização da documentação.
 
-Exemplos:
+### Branchs Temporárias Utilizadas
 
 ```text
 chore/configura-infraestrutura
 chore/configura-typeorm
 feat/crud-clientes
 fix/atualiza-clientes
+docs/atualiza-readme
 feat/autenticacao
+chore/revisao-backend
 feat/fila-boas-vindas
+style/formata-backend
+feat/frontend
+chore/configuracao-next
+feat/login-frontend
+feat/listagem-clientes-frontend
+feat/crud-clientes-frontend
+style/interface-frontend
+feat/dockerizacao
+docs/finalizacao-readme
 ```
 
 ## Fluxo resumido
@@ -593,7 +617,7 @@ feat/fila-boas-vindas
 dev
     → branch temporária
         → implementação
-            → build e testes
+            → build, lint e testes manuais
                 → commit e push
                     → integração em dev
                         → revisão final
@@ -602,29 +626,78 @@ dev
 
 ---
 
-# 🤖 Uso de IA
+# Decisões e limitações da versão entregue
 
-Ferramentas de inteligência artificial foram utilizadas como apoio durante o desenvolvimento para:
+- O frontend foi concentrado em duas páginas: login e clientes. Cadastro e edição compartilham o mesmo formulário na página de clientes.
+- A interface utiliza componentes cliente e Fetch API diretamente nas páginas. Não foi criada uma camada de serviços ou um contexto de autenticação.
+- O token é armazenado no `localStorage`. A página de clientes verifica sua presença e redireciona para o login; respostas `401` também removem o token e redirecionam o usuário.
+- A proteção principal dos dados está no backend por meio do `JwtAuthGuard`. Não há `middleware` do Next.js nesta versão.
+- A URL da API está fixa para o ambiente local.
+- O envio de e-mail é apenas simulado no terminal, como solicitado no case; não há integração SMTP.
+- Não foram implementados paginação, ordenação, Bull Board ou testes automatizados, por serem itens opcionais e devido ao prazo disponível para o desenvolvimento.
+- O projeto não possui deploy em produção.
 
-- compreender conceitos do NestJS, Docker, TypeORM e migrations;
-- esclarecer dúvidas sobre arquitetura e organização do projeto;
-- revisar trechos de código escritos pela autora;
-- apoiar o planejamento das etapas de desenvolvimento;
-- auxiliar na elaboração e revisão da documentação;
-- identificar possíveis erros e alternativas de implementação.
+---
 
-As decisões de implementação, adaptações aos requisitos do case, escrita do código e execução dos comandos foram realizados e revisados pela autora.
+# 🚀 Melhorias futuras
+
+## Backend
+
+- adicionar testes unitários, de integração e ponta a ponta para autenticação, clientes e fila;
+- validar as variáveis de ambiente na inicialização e separar configurações por ambiente;
+- fortalecer a autenticação com cookies `HttpOnly`, renovação de token e regras mais completas para usuários;
+- adicionar tentativas, atraso, monitoramento e tratamento de falhas dos jobs, além da futura integração com um serviço real de e-mail;
+- implementar paginação, ordenação e documentação da API com Swagger.
+
+## Frontend
+
+- dividir a tela em componentes reutilizáveis e criar rotas próprias para cadastro e edição;
+- centralizar requisições em uma camada de API e definir o endereço do backend por variável de ambiente;
+- usar recursos do Next.js de forma mais completa, incluindo layouts aninhados, estados de carregamento e erro e uma estratégia de proteção baseada em cookies e middleware;
+- aprimorar feedbacks de validação e da API, adicionando máscara de telefone, toasts e indicadores de carregamento;
+- melhorar responsividade, acessibilidade e experiência da tabela, com paginação e ordenação.
+
+---
+
+# 🤖 Uso de Inteligência Artificial e fontes de estudo
+
+O **ChatGPT** foi utilizado de forma frequente e transparente como ferramenta de apoio e orientação durante o desenvolvimento deste case, especialmente por NestJS, Next.js, Autenticação, BullMQ e Docker Compose ainda serem tecnologias novas no meu processo de aprendizagem.
+
+A ferramenta foi utilizada para:
+
+- ajudar a interpretar os requisitos e organizar o desenvolvimento por etapas;
+- explicar conceitos do NestJS, como módulos, injeção de dependência, DTOs, guards, strategies e repositories;
+- esclarecer o funcionamento de TypeORM, migrations, seed, PostgreSQL, BullMQ, Redis, JWT e Docker;
+- discutir alternativas de implementação adequadas ao meu nível de conhecimento e ao prazo disponível;
+- revisar códigos escritos durante o desenvolvimento e apoiar a identificação de erros;
+- auxiliar em problemas de integração entre Next.js e NestJS, incluindo Fetch API, CORS, token Bearer, `useEffect` e ESLint;
+- revisar Dockerfiles, Docker Compose, comandos de execução e esta documentação.
+
+Além da IA, foram consultadas as **documentações oficiais das tecnologias utilizadas**, principalmente NestJS, Next.js, TypeORM, Docker e BullMQ, e vídeos técnicos no **YouTube** para complementar a compreensão prática. Algumas referências e conceitos iniciais também partiram de recomendações do meu professor de backend, que indicou caminhos de estudo para tecnologias que eu ainda não conhecia.
+
+As respostas e sugestões recebidas não foram aplicadas sem revisão. Os trechos foram lidos, comparados com a documentação, adaptados à estrutura do projeto e validados por meio de builds, lint, execução da aplicação e testes manuais dos fluxos e endpoints. As decisões finais, a implementação, os comandos executados e a revisão do comportamento da aplicação foram realizados por mim.
+
+---
+
+## Aprendizados
+
+O principal desafio foi construir, em um prazo curto, uma aplicação completa utilizando várias tecnologias que ainda não faziam parte da minha experiência prática, especialmente NestJS, Next.js, Docker e Autenticação. O desenvolvimento me permitiu exercitar a integração entre frontend, API, banco de dados e processamento assíncrono, além de aprofundar conhecimentos sobre autenticação, migrations, containers e organização modular.
+
+A versão entregue prioriza requisitos funcionais e clareza de código. As limitações foram mantidas documentadas para representar com honestidade o estágio atual do projeto e os próximos passos de aprendizagem.
 
 ---
 
 ## 👩‍💻 Autora
 
-Desenvolvido por [Bruna Fraga](https://github.com/brunafraga-0).
+**Bruna Caroline Fraga**
+
+- GitHub: [BrunaFraga-0](https://github.com/BrunaFraga-0)
+- Projeto: [github.com/BrunaFraga-0/meucrm](https://github.com/BrunaFraga-0/meucrm)
 
 ---
 
-# 📄 Licença
+# 📄 Finalidade
 
-Projeto desenvolvido exclusivamente para fins de avaliação técnica e aprendizado.
+Projeto desenvolvido para fins de avaliação técnica e aprendizado.
 
 ---
